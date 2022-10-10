@@ -1,5 +1,4 @@
-import { of } from 'mushroom-di';
-import { Message } from './message';
+import { Message, of } from 'mushroom-di';
 import {
     Animal,
     Grassland,

@@ -1,5 +1,4 @@
-import { of, MushroomService } from 'mushroom-di';
-import { Message } from './message';
+import { of, MushroomService, Message } from 'mushroom-di';
 
 test('只能通过依赖注入的方式创建MushroomService实例', () => {
     const messageHistory = Message.getHistory();
@@ -9,7 +8,8 @@ test('只能通过依赖注入的方式创建MushroomService实例', () => {
     expect(messageHistory.length).toBe(0);
 
     try {
-        new MushroomService();
+        const a = new MushroomService();
+        console.log(a);
     } catch (error) {}
 
     expect(messageHistory[0]?.code).toBe('29003');

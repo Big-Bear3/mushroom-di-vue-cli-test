@@ -1,5 +1,4 @@
-import { of, by, AUTO, DependencyConfig, MushroomService, Injectable, registerDepsConfig } from 'mushroom-di';
-import { Message } from './message';
+import { of, by, AUTO, DependencyConfig, MushroomService, Injectable, registerDepsConfig, Message } from 'mushroom-di';
 import { Animal, BrownBear, ErrorZoo, Zoo } from './test-classes/basicClasses';
 import { BrownBears } from './test-classes/basicClasses';
 import { ClassesConfig, useFood, useMonkey } from './test-classes/classesConfig';
