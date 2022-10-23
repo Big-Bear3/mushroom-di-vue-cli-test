@@ -1,102 +1,62 @@
 <template>
-    <div class="hello">
-        <h1>{{ msg }}</h1>
-        <p>
-            For a guide and recipes on how to configure / customize this project,<br />
-            check out the
-            <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-        </p>
-        <h3>Installed CLI Plugins</h3>
-        <ul>
-            <li>
-                <a
-                    href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript"
-                    target="_blank"
-                    rel="noopener"
-                    >typescript</a
-                >
-            </li>
-            <li>
-                <a
-                    href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint"
-                    target="_blank"
-                    rel="noopener"
-                    >eslint</a
-                >
-            </li>
-            <li>
-                <a
-                    href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest"
-                    target="_blank"
-                    rel="noopener"
-                    >unit-jest</a
-                >
-            </li>
-        </ul>
-        <h3>Essential Links</h3>
-        <ul>
-            <li>
-                <a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a>
-            </li>
-            <li>
-                <a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a>
-            </li>
-            <li>
-                <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a>
-            </li>
-            <li>
-                <a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a>
-            </li>
-            <li>
-                <a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a>
-            </li>
-        </ul>
-        <h3>Ecosystem</h3>
-        <ul>
-            <li>
-                <a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a>
-            </li>
-            <li>
-                <a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a>
-            </li>
-            <li>
-                <a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a>
-            </li>
-            <li>
-                <a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a>
-            </li>
-            <li>
-                <a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a>
-            </li>
-        </ul>
-    </div>
+    <main>
+        <div>version: {{ appStore.version }}</div>
+        <div>count: {{ appStore.count }}</div>
+        <div>doubleCount: {{ appStore.double }}</div>
+        <div>doubleWithSigh: {{ appStore.doubleWithSigh }}</div>
+        <div>loginUser: {{ appStore.loginUser }}</div>
+        <div>
+            <button @click="increment">Increment</button>
+            <button @click="addVersionSuffix">AddVersionSuffix</button>
+            <button @click="setVersion">SetVersion</button>
+            <button @click="setLoginUser">SetLoginUser</button>
+            <button @click="patchCount">Patch</button>
+            <button @click="resetStore">ResetStore</button>
+        </div>
+    </main>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { AppStore } from '@/stores/appStore';
+import { of } from 'mushroom-di';
 
-export default defineComponent({
-    name: 'HelloWorld',
-    props: {
-        msg: String
+const appStore = of(AppStore);
+
+function increment() {
+    appStore.increment();
+}
+
+function addVersionSuffix() {
+    appStore.versionSuffix = '！';
+}
+
+function setVersion() {
+    appStore.version = '1.0.0';
+}
+
+function setLoginUser() {
+    appStore.loginUser = '张三';
+}
+
+function patchCount() {
+    appStore.$patch({
+        count: 0
+    });
+}
+
+function resetStore() {
+    appStore.$reset();
+}
+
+appStore.$onAction(
+    ({
+        name, // action 名称
+        store, // store 实例，类似 `someStore`
+        args, // 传递给 action 的参数数组
+        after, // 在 action 返回或解决后的钩子
+        onError // action 抛出或拒绝的钩子
+    }) => {
+        console.log(name);
     }
-});
+);
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-    margin: 40px 0 0;
-}
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-li {
-    display: inline-block;
-    margin: 0 10px;
-}
-a {
-    color: #42b983;
-}
-</style>
