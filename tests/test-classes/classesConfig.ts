@@ -1,4 +1,4 @@
-import type { Class } from 'mushroom-di';
+import { Class, MushroomService } from 'mushroom-di';
 
 import { DependencyConfig, of, DependencyConfigEntity, STOP_DEEP_CONFIG } from 'mushroom-di';
 import {
@@ -17,7 +17,8 @@ import {
     Pig,
     RedMonkey,
     RedPig,
-    YellowMonkey
+    YellowMonkey,
+    YellowMonkeyChief
 } from './configedClasses';
 
 let usingFood: any = Food;
@@ -107,17 +108,33 @@ export class ClassesConfig {
 }
 
 export class ScopedClassesConfig {
-    private static monkeyChiefs = new Map<string, MonkeyChief>();
-
     @DependencyConfig(MonkeyChief)
     static configMonkeyChief(configEntity: DependencyConfigEntity<typeof MonkeyChief>): void | MonkeyChief {
         const location = configEntity.args[0];
+        const mushroomService = of(MushroomService);
 
-        if (ScopedClassesConfig.monkeyChiefs.has(location)) {
-            return ScopedClassesConfig.monkeyChiefs.get(location);
+        if (mushroomService.containsDependencyWithKey(MonkeyChief, location)) {
+            return mushroomService.getDependencyByKey(MonkeyChief, location);
         } else {
             configEntity.afterInstanceCreate = (instance): void => {
-                ScopedClassesConfig.monkeyChiefs.set(location, instance);
+                mushroomService.addDependencyWithKey(MonkeyChief, instance, location);
+            };
+        }
+    }
+
+    @DependencyConfig(YellowMonkeyChief)
+    static configYellowMonkeyChief(configEntity: DependencyConfigEntity<typeof YellowMonkeyChief>): void | YellowMonkeyChief {
+        const location = configEntity.args[0];
+        const mushroomService = of(MushroomService);
+
+        if (mushroomService.containsDependencyWithKey(YellowMonkeyChief, location)) {
+            return mushroomService.getDependencyByKey(YellowMonkeyChief, location);
+        } else {
+            configEntity.afterInstanceCreate = (instance): void => {
+                mushroomService.addDependencyWithWeakKey(YellowMonkeyChief, instance, location);
+            };
+            configEntity.afterInstanceFetch = (instance): void => {
+                if (!instance) throw new Error();
             };
         }
     }

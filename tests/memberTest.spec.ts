@@ -10,7 +10,6 @@ import {
     FemaleLion,
     SolarSystem
 } from './test-classes/extendsClasses';
-
 Message.toggleConsolePrintable(false);
 
 test('静态成员变量注入', () => {
