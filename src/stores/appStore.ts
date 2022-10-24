@@ -11,7 +11,7 @@ export class CommonStore extends PiniaStore {
 }
 
 @Injectable({ type: 'singleton' })
-@Store('app')
+@Store({ id: 'app' })
 export class AppStore extends CommonStore {
     @State()
     count = 5;
