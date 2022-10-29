@@ -2,6 +2,8 @@ import { of, MushroomService, Message, by, registerDepsConfig } from 'mushroom-d
 import { ScopedClassesConfig } from './test-classes/classesConfig';
 import { MonkeyChief, YellowMonkeyChief } from './test-classes/configedClasses';
 
+Message.toggleConsolePrintable(false);
+
 registerDepsConfig(ScopedClassesConfig);
 
 test('只能通过依赖注入的方式创建MushroomService实例', () => {
@@ -100,4 +102,16 @@ test('移除对象', () => {
     expect(isReallyDelete1).toBe(false);
     expect(isReallyDelete2).toBe(true);
     expect(isExists).toBe(false);
+});
+
+test('将非object类型用作weakKeyedDependenciesMap对象中WeakMap的键', () => {
+    const messageHistory = Message.getHistory();
+    Message.clearHistory();
+    const mushroomService = of(MushroomService);
+    const monkeyChief = of(MonkeyChief);
+    try {
+        mushroomService.addDependencyWithWeakKey(MonkeyChief, monkeyChief, <any>'1');
+    } catch (error) {}
+
+    expect(messageHistory[0]?.code).toBe('29018');
 });
